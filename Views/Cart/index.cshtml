@@ -1,0 +1,61 @@
+@model IEnumerable<CartItem>
+
+<div id="User" style="display:none;" data-email="@User.Identity.Name"
+  data-customer="@User.IsInRole("northwind-customer")"></div>
+<h3>Shopping Cart</h3>
+<div style="display:none;" id="ProductId"></div>
+<div class="row">
+  <div class="col col-xs-4"><strong>Product</strong></div>
+  <div class="col col-xs-1"><strong>Price</strong></div>
+  <div class="col col-xs-4"><strong>Quantity</strong></div>
+  <div class="col col-xs-1"></div>
+  <div class="col col-xs-1"><strong>Total</strong></div>
+  <div class="col col-xs-1"></div>
+</div>
+<div class="list-group">
+  @foreach (CartItem c in Model)
+  {
+    <table class="table table-hover">
+    </table>
+    <thead>
+      <tr>
+        <th scope="col">
+          <div class="form-row" id="row_@c.CartItemId">
+            <div class="form-group col col-xs-4">@(c.Product.ProductName)</div>
+            <div class="form-group col col-xs-1">
+              $<span id="price_@c.CartItemId">@c.Product.UnitPrice.ToString("F")</span>
+            </div>
+            <div class="form-group col col-xs-4 text-nowrap">
+              <button id="IncreaseCartQuantity" class="btn btn-primary btn-sm" data-id="@c.CartItemId">
+                <i class="fa-solid fa-plus"></i>
+              </button>
+              <button id="DecreaseCartQuantity" class="btn btn-secondary btn-sm" data-id="@c.CartItemId">
+                <i class="fa-solid fa-minus"></i>
+              </button>
+              <span id="qty_@c.CartItemId">@c.Quantity</span> Unit(s)
+            </div>
+            <div class="form-group col col-xs-1">
+              <button id="Save" style="display:none;" data-original="@c.Quantity" type="button"
+                class="btn btn-info btn-sm" id="save_@c.CartItemId" data-id="@c.CartItemId">
+                Save
+              </button>
+            </div>
+            <div class="form-group col col-xs-1 text-nowrap">
+              $<span id="total_@c.CartItemId">@((c.Quantity * c.Product.UnitPrice).ToString("F"))</span>
+            </div>
+            <div class="form-group col col-xs-1">
+              <button id="RemoveItem" type="button" class="btn btn-danger btn-sm" data-id="@c.CartItemId">
+                Delete
+              </button>
+            </div>
+          </div>
+        </th>
+      </tr>
+    </thead>
+  }
+</div>
+
+@section Scripts
+  {
+  <script src="../../js/product.js"></script>
+}
