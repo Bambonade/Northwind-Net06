@@ -13,7 +13,7 @@
                     <div class="col"><strong>Product</strong></div>
                     <div class="col text-left"><strong>Price</strong></div>
                     <div class="col"><strong>Quantity</strong></div>
-                    <div class="col"><strong>Total</strong></div>
+                    <div class="col col-xs-1"><strong>Total</strong></div>
                 </div>
             </thead>
             <tbody>
@@ -25,23 +25,21 @@
                         var ProductId = c.ProductId;
                         var UnitPrice = c.Product.UnitPrice;
                         var Quantity = c.Quantity;
+                        var ProductTotal = c.Quantity * c.Product.UnitPrice;
 
                         tableRows++;
 
                         orderTotal += (double)(c.Product.UnitPrice * c.Quantity) ;
                         <div class="form-row" id="row_@c.CartItemId">
-                            <div class="form-group col col-xs-4">@(c.Product.ProductName)</div>
+                            <div class="form-group col col-xs-1">@(c.Product.ProductName)</div>
                             <div class="form-group col col-xs-1">
                                 $<span id="price_@c.CartItemId">@c.Product.UnitPrice.ToString("F")</span>
                             </div>
                             <div class="form-group col col-xs-4 text-nowrap">
-                                <button id="IncreaseCartQuantity" class="btn btn-primary btn-sm" data-id="@c.CartItemId">
-                                    <i class="fa-solid fa-plus"></i>
-                                </button>
-                                <button id="DecreaseCartQuantity" class="btn btn-secondary btn-sm" data-id="@c.CartItemId">
-                                    <i class="fa-solid fa-minus"></i>
-                                </button>
                                 <span id="qty_@c.CartItemId">@c.Quantity</span> Unit(s)
+                            </div>
+                            <div class="form-group col col-xs-4 text-nowrap">
+                                $<span>@ProductTotal.ToString("F")</span>
                             </div>
                         </div>
                     }
@@ -51,4 +49,28 @@
                 </div>
             </tbody>
         </table>
+    </div>
+
+    @* DISCOUNTS *@
+    <div class="col col-6 border d-flex flex-column justify-content-center">
+        <div id="discountsContainer" class="container">
+            <div id="currentDiscounts" style="display:none;">
+            @foreach (var discount in Model.Discounts){
+                <div class="discount" id="discount-@discount.Code" 
+                    data-discount-code="@discount.Code" 
+                    data-discount-percent="@discount.DiscountPercent" 
+                    data-product-id="@discount.ProductId">
+                </div>
+            }
+            </div>
+            <h6>Enter Discount Codes:</h6>
+            <div id="discountCodeForm" class="container row">
+                <input type="text" class="col col-10 form-control" id="discountCodeInput" placeholder="Discount Code">
+                <button type="button" id="discountCodeButton" class="col col-2 btn btn-success"><i class="fa-solid fa-check"></i></button>
+            </div>
+        </div>
+        <div id="confirmationContainer" class="container row justify-content-center mt-4">
+            <a class="col col-5 mx-1" asp-controller="Cart" asp-action="Index"><button type="button" class="orderConfirmationButton btn btn-danger w-100">Return to Cart</button></a>
+            <a class="col col-5 mx-1"><button type="button" id="place-order-btn" class="orderConfirmationButton btn btn-success w-100">Place Order</button></a>
+        </div>
     </div>
